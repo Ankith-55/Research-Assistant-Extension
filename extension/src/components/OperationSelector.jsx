@@ -4,6 +4,7 @@ export default function OperationSelector({ selected, onSelect }) {
   const operations = [
     { id: 'summarize', label: 'Summarize' },
     { id: 'suggest', label: 'Suggest Topics' },
+    { id: 'quiz', label: 'Quiz' },
   ];
 
   return (

@@ -5,6 +5,7 @@ import TextInput from './TextInput';
 import OperationSelector from './OperationSelector';
 import LoadingSpinner from './LoadingSpinner';
 import ResultDisplay from './ResultDisplay';
+import QuizDisplay from './QuizDisplay';   // <-- NEW
 
 export default function App() {
   const { selectedText, error: selectionError, loading: selectionLoading } = useSelectedText();
@@ -12,9 +13,9 @@ export default function App() {
   const [operation, setOperation] = useState('summarize');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState('');
+  const [quiz, setQuiz] = useState(null);   // <-- NEW: holds parsed quiz JSON
   const [error, setError] = useState('');
 
-  // When the hook finishes fetching selected text, sync it into the editable text state
   React.useEffect(() => {
     if (!selectionLoading && selectedText) {
       setText(selectedText);
@@ -28,10 +29,27 @@ export default function App() {
     }
     setError('');
     setResult('');
+    setQuiz(null);   // clear previous quiz
     setLoading(true);
     try {
       const output = await processContent(text, operation);
-      setResult(output);
+      if (operation === 'quiz') {
+        // Parse the JSON quiz. If parsing fails, show raw text as fallback.
+        try {
+          const parsed = JSON.parse(output);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setQuiz(parsed);
+          } else {
+            setResult(output);   // fallback: show raw text
+            setError('Received quiz data but format was unexpected. Showing raw response.');
+          }
+        } catch {
+          setResult(output);
+          setError('Could not parse quiz. Showing raw response.');
+        }
+      } else {
+        setResult(output);
+      }
     } catch (err) {
       setError(err.message || 'Something went wrong while processing your request.');
     } finally {
@@ -83,7 +101,14 @@ export default function App() {
         </div>
       )}
 
-      {result && !loading && !error && <ResultDisplay result={result} />}
+      {/* Show Quiz if it was successfully parsed, otherwise ResultDisplay */}
+      {quiz && !loading && !error && (
+        <QuizDisplay questions={quiz} />
+      )}
+
+      {result && !loading && !error && !quiz && (
+        <ResultDisplay result={result} />
+      )}
     </div>
   );
 }

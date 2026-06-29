@@ -103,6 +103,16 @@ public class ResearchService {
                         "Present the result as a simple bullet‑point list with clear headings. " +
                         "Use only plain text (no markdown formatting).\n\n");
                 break;
+
+                //V2
+            case "quiz":
+                prompt.append("Based on the following content, generate exactly 5 multiple‑choice questions. " +
+                        "Output ONLY a valid JSON array of objects. Each object must have:\n" +
+                        "- \"question\": (string) the question text\n" +
+                        "- \"options\": (array of 4 strings) the answer choices\n" +
+                        "- \"correctIndex\": (integer 0-3) the index of the correct option\n\n" +
+                        "Do not include any other text, explanations, or markdown. Output raw JSON only.\n\n");
+                break;
             default:
                 throw new IllegalArgumentException("Unknown Operation: " + request.getOperation());
         }
