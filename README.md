@@ -1,4 +1,4 @@
-````markdown
+
 # 🔬 Research Assistant – AI-Powered Chrome Extension
 
 **Research Assistant** is a Chrome extension that brings the power of **Google Gemini** directly into your browser. Simply select any text on a webpage and, with a single click, generate a **summary**, **detailed notes**, or an **interactive quiz**.
@@ -260,4 +260,4 @@ Bug reports, feature requests, and suggestions are always appreciated.
 This project is intended for educational and learning purposes.
 
 Feel free to modify and extend it for your own use.
-````
+
